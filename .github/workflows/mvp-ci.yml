@@ -2,11 +2,9 @@ name: DIGITERA MVP CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,44 +12,22 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: 18
 
-    - name: Install backend dependencies
-      working-directory: backend
+    - name: Install Dependencies
       run: npm install
 
-    - name: Build backend
-      working-directory: backend
+    - name: Build Project
       run: npm run build
-
-    - name: Install frontend dependencies
-      working-directory: frontend
-      run: npm install
-
-    - name: Build frontend
-      working-directory: frontend
-      run: npm run build
-
-    - name: Create MVP package
-      run: |
-        mkdir -p build-package/backend
-        mkdir -p build-package/frontend
-
-        cp -r backend/dist build-package/backend/
-        cp backend/package.json build-package/backend/
-
-        cp -r frontend/dist build-package/frontend/
-        cp frontend/package.json build-package/frontend/
-
-        zip -r digitera-mvp-build.zip build-package/
 
     - name: Upload MVP Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: digitera-mvp-build
-        path: digitera-mvp-build.zip
+        path: dist/
+      
